@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from garage_api.models import Car, Manufacturer, Part
 from garage_api.serializers import CarSerializer, PartSerializer, ManufacturerNestedReadSerializer, \
-    ManufacturerSerializer, CarNestedReadSerializer
+    ManufacturerSerializer, CarNestedReadSerializer, PartWriteSerializer
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
@@ -47,9 +47,10 @@ class ListCreateManufacturerAPIView(ReadWriteSerializerMixin, ListCreateAPIView)
     write_serializer = ManufacturerSerializer
 
 
-class PartModelViewSet(ModelViewSet):
+class PartModelViewSet(ReadWriteSerializerMixin, ModelViewSet):
     queryset = Part.objects.all()
-    serializer_class = PartSerializer
+    read_serializer = PartSerializer
+    write_serializer = PartWriteSerializer
 
 
 class CarStatsView(APIView):
