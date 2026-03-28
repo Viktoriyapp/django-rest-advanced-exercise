@@ -13,4 +13,5 @@ urlpatterns = [
         path('stats/', views.CarStatsView.as_view(), name='car-stats'),
     ])),
     path('manufacturers/', views.ListCreateManufacturerAPIView.as_view(), name='manufacturer-list'),
+    path('admin-dashboard/', views.AdminDashboardView.as_view(), name='admin-dashboard'),
 ] + router.urls

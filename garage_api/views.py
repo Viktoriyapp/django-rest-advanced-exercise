@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db.models.aggregates import Count, Min, Max
 from rest_framework import status
 from rest_framework.views import APIView
@@ -8,6 +9,8 @@ from garage_api.models import Car, Manufacturer, Part
 from garage_api.serializers import CarSerializer, PartSerializer, ManufacturerNestedReadSerializer, \
     ManufacturerSerializer, CarNestedReadSerializer
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 
 # Create your views here.
 
@@ -26,6 +29,7 @@ class ReadWriteSerializerMixin:
 
 
 class ListCreateCarAPIView(ReadWriteSerializerMixin, ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Car.objects.select_related('manufacturer').prefetch_related('parts').all()
     read_serializer = CarNestedReadSerializer
     write_serializer = CarSerializer
@@ -56,3 +60,17 @@ class CarStatsView(APIView):
             newest_year=Max('year')
         )
         return Response(stats, status=status.HTTP_200_OK)
+
+
+class AdminDashboardView(APIView):
+    permission_classes = [IsAdminUser]
+    def get(self, request: Request) -> Response:
+        User = get_user_model()
+        data = {
+            'users_count': User.objects.count(),
+            'manufacturers_count': Manufacturer.objects.count(),
+            'cars_count': Car.objects.count(),
+            'parts_count': Part.object.count(),
+            'requested_by': request.user.username,
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
