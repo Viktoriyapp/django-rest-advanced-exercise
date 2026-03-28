@@ -19,3 +19,21 @@ class PartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Part
         fields = '__all__'
+
+
+class ManufacturerNestedReadSerializer(serializers.ModelSerializer):
+    cars = CarSerializer(many=True, read_only=True)
+    parts = PartSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Manufacturer
+        fields = '__all__'
+
+
+class CarNestedReadSerializer(serializers.ModelSerializer):
+    manufacturer = ManufacturerSerializer(read_only=True)
+    parts = PartSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Car
+        fields = '__all__'

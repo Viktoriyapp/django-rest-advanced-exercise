@@ -27,7 +27,7 @@ class Car(TimeStampModelMixin):
     verified = models.BooleanField(default=False)
     year = models.PositiveIntegerField(validators=[MinValueValidator(1900)])
     price = models.DecimalField(max_digits=10, decimal_places=2,)
-    manufacturer = models.ForeignKey(to=Manufacturer, on_delete=models.CASCADE)
+    manufacturer = models.ForeignKey(to=Manufacturer, related_name='cars', on_delete=models.CASCADE)
 
 
 class Part(TimeStampModelMixin):
@@ -38,5 +38,5 @@ class Part(TimeStampModelMixin):
         decimal_places=2,
         validators=[MinValueValidator(limit_value=Decimal('0.01'), message="Price has to be a positive number")]
     )
-    manufacturer = models.ForeignKey(to=Manufacturer, on_delete=models.CASCADE)
-    cars = models.ManyToManyField(to=Car)
+    manufacturer = models.ForeignKey(to=Manufacturer, related_name='parts', on_delete=models.CASCADE)
+    cars = models.ManyToManyField(to=Car, related_name='parts')
