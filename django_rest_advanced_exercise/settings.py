@@ -37,8 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'drf_spectacular',
     'garage_api',
 ]
@@ -89,6 +91,14 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend', # GET cars/?car=1%year=2020
+        'rest_framework.filters.SearchFilter', # GET cars/?search=toyota
+        'rest_framework.filters.OrderingFilter', # GET cars/?ordering=-year
+    ),
+    'EXCEPTION_HANDLER': 'django_rest_advanced_exercise.exeptions.custom_exception_handler',
 }
 
 SPECTACULAR_SETTINGS = {

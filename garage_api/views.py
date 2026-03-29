@@ -34,6 +34,10 @@ class ListCreateCarAPIView(ReadWriteSerializerMixin, ListCreateAPIView):
     read_serializer = CarNestedReadSerializer
     write_serializer = CarSerializer
 
+    # filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] # If we havent added them in settings
+    filterset_fields = ['verified','year']
+    ordering_fields = ['year']
+
 
 class RetrieveUpdateDestroyCarAPIView(ReadWriteSerializerMixin, RetrieveUpdateDestroyAPIView):
     queryset = Car.objects.select_related('manufacturer').prefetch_related('parts').all()

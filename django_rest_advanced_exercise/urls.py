@@ -19,7 +19,7 @@ from os import name
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
-from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView, TokenBlacklistView
 from drf_spectacular.views import SpectacularSwaggerView, SpectacularRedocView, SpectacularAPIView
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/', include('garage_api.urls')),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('api/schema/',SpectacularAPIView.as_view(),name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
